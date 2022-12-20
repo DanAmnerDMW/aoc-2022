@@ -19,7 +19,7 @@ fn main() {
 
     for elf in elf_calories {
         let mut total_calories: i32 = 0;
-        for calories in elf.split_whitespace().collect::<Vec<&str>>() {
+        for calories in elf.lines().collect::<Vec<&str>>() {
             total_calories += calories.parse::<i32>().expect("Unable to cast to int");
         }
         if total_calories > top3.first {
