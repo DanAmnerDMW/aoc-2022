@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 use std::fs;
 
 fn read_input_file() -> String {
-    return fs::read_to_string("input.txt").expect("Unable to read input file");
+    fs::read_to_string("input.txt").unwrap()
 }
 
 fn main() {
@@ -10,11 +10,11 @@ fn main() {
 
     let split_input: Vec<&str> = file_input.split("\n\n").collect();
 
-    let crates = split_input.get(0).unwrap();
+    let crates = split_input.first().unwrap();
     let instructions = split_input.get(1).unwrap();
 
     let lines = crates.lines().collect::<Vec<&str>>();
-    let num_stacks = (lines.get(0).unwrap().len() / 4) + 1;
+    let num_stacks = (lines.first().unwrap().len() / 4) + 1;
     let mut stacks: [VecDeque<char>; 9] = Default::default();
 
     let mut line_index = 0;
@@ -57,8 +57,8 @@ fn main() {
             moving_crates.push_front(crate_to_move);
         }
 
-        for moving_crate_num in 0..=(num_to_move - 1) {
-            stacks[to_stack - 1].push_back(moving_crates[moving_crate_num]);
+        for item in moving_crates.iter().take(num_to_move) {
+            stacks[to_stack - 1].push_back(*item);
         }
     }
 

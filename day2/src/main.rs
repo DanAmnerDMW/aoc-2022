@@ -1,83 +1,83 @@
 use std::fs;
 
 enum Action {
-    ROCK,
-    PAPER,
-    SCISSORS,
-    UNKNOWN,
+    Rock,
+    Paper,
+    Scissors,
+    Unknown,
 }
 
 enum Outcome {
-    WIN,
-    DRAW,
-    LOSE,
-    UNKNOWN,
+    Win,
+    Draw,
+    Lose,
+    Unknown,
 }
 
 fn read_input_file() -> String {
-    return fs::read_to_string("input.txt").expect("Unable to read input file");
+    fs::read_to_string("input.txt").unwrap()
 }
 
 fn map_opponent_move(input: &str) -> Action {
     if input.eq("A") {
-        return Action::ROCK;
+        return Action::Rock;
     } else if input.eq("B") {
-        return Action::PAPER;
+        return Action::Paper;
     } else if input.eq("C") {
-        return Action::SCISSORS;
+        return Action::Scissors;
     }
 
-    return Action::UNKNOWN;
+    Action::Unknown
 }
 
 fn map_my_move(input: &str, action: &Action) -> Action {
     if input.eq("X") {
         match action {
-            Action::ROCK => return Action::SCISSORS,
-            Action::PAPER => return Action::ROCK,
-            Action::SCISSORS => return Action::PAPER,
-            Action::UNKNOWN => return Action::UNKNOWN,
+            Action::Rock => return Action::Scissors,
+            Action::Paper => return Action::Rock,
+            Action::Scissors => return Action::Paper,
+            Action::Unknown => return Action::Unknown,
         }
     } else if input.eq("Y") {
         match action {
-            Action::ROCK => return Action::ROCK,
-            Action::PAPER => return Action::PAPER,
-            Action::SCISSORS => return Action::SCISSORS,
-            Action::UNKNOWN => return Action::UNKNOWN,
+            Action::Rock => return Action::Rock,
+            Action::Paper => return Action::Paper,
+            Action::Scissors => return Action::Scissors,
+            Action::Unknown => return Action::Unknown,
         }
     } else if input.eq("Z") {
         match action {
-            Action::ROCK => return Action::PAPER,
-            Action::PAPER => return Action::SCISSORS,
-            Action::SCISSORS => return Action::ROCK,
-            Action::UNKNOWN => return Action::UNKNOWN,
+            Action::Rock => return Action::Paper,
+            Action::Paper => return Action::Scissors,
+            Action::Scissors => return Action::Rock,
+            Action::Unknown => return Action::Unknown,
         }
     }
 
-    return Action::UNKNOWN;
+    Action::Unknown
 }
 
 fn determine_result(my_action: &Action, opponent_action: &Action) -> Outcome {
     match my_action {
-        Action::ROCK => match opponent_action {
-            Action::ROCK => return Outcome::DRAW,
-            Action::PAPER => return Outcome::LOSE,
-            Action::SCISSORS => return Outcome::WIN,
-            Action::UNKNOWN => return Outcome::UNKNOWN,
+        Action::Rock => match opponent_action {
+            Action::Rock => Outcome::Draw,
+            Action::Paper => Outcome::Lose,
+            Action::Scissors => Outcome::Win,
+            Action::Unknown => Outcome::Unknown,
         },
-        Action::PAPER => match opponent_action {
-            Action::ROCK => return Outcome::WIN,
-            Action::PAPER => return Outcome::DRAW,
-            Action::SCISSORS => return Outcome::LOSE,
-            Action::UNKNOWN => return Outcome::UNKNOWN,
+        Action::Paper => match opponent_action {
+            Action::Rock => Outcome::Win,
+            Action::Paper => Outcome::Draw,
+            Action::Scissors => Outcome::Lose,
+            Action::Unknown => Outcome::Unknown,
         },
-        Action::SCISSORS => match opponent_action {
-            Action::ROCK => return Outcome::LOSE,
-            Action::PAPER => return Outcome::WIN,
-            Action::SCISSORS => return Outcome::DRAW,
-            Action::UNKNOWN => return Outcome::UNKNOWN,
+        Action::Scissors => match opponent_action {
+            Action::Rock => Outcome::Lose,
+            Action::Paper => Outcome::Win,
+            Action::Scissors => Outcome::Draw,
+            Action::Unknown => Outcome::Unknown,
         },
-        Action::UNKNOWN => return Outcome::UNKNOWN,
+        Action::Unknown => Outcome::Unknown,
     }
 }
 
@@ -89,26 +89,26 @@ fn main() {
     for turn in file_input.lines() {
         let moves: Vec<&str> = turn.split_whitespace().collect();
 
-        let opponent_move = moves.get(0).expect("No value at this position");
+        let opponent_move = moves.first().expect("No value at this position");
         let my_move = moves.get(1).expect("No value at this position");
 
-        let opponent_action = map_opponent_move(&opponent_move);
-        let my_action = map_my_move(&my_move, &opponent_action);
+        let opponent_action = map_opponent_move(opponent_move);
+        let my_action = map_my_move(my_move, &opponent_action);
 
         match my_action {
-            Action::ROCK => score += 1,
-            Action::PAPER => score += 2,
-            Action::SCISSORS => score += 3,
-            Action::UNKNOWN => score += 0,
+            Action::Rock => score += 1,
+            Action::Paper => score += 2,
+            Action::Scissors => score += 3,
+            Action::Unknown => score += 0,
         }
 
         let result = determine_result(&my_action, &opponent_action);
 
         match result {
-            Outcome::WIN => score += 6,
-            Outcome::DRAW => score += 3,
-            Outcome::LOSE => score += 0,
-            Outcome::UNKNOWN => score += 0,
+            Outcome::Win => score += 6,
+            Outcome::Draw => score += 3,
+            Outcome::Lose => score += 0,
+            Outcome::Unknown => score += 0,
         }
     }
 

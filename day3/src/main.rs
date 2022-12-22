@@ -1,7 +1,7 @@
 use std::fs;
 
 fn read_input_file() -> String {
-    return fs::read_to_string("input.txt").expect("Unable to read input file");
+    fs::read_to_string("input.txt").unwrap()
 }
 
 fn part1() -> u32 {
@@ -25,38 +25,33 @@ fn part1() -> u32 {
         }
     }
 
-    return score;
+    score
 }
 
 fn part2() -> u32 {
     let file_input = read_input_file();
-    let mut rucksack_num = 0;
     let mut rucksack_group: [&str; 3] = [""; 3];
     let mut score = 0;
 
-    for rucksack in file_input.lines() {
+    for (rucksack_num, rucksack) in file_input.lines().enumerate() {
         rucksack_group[rucksack_num % 3] = rucksack;
 
         // If mod3 == 2 then we have a full group
         if rucksack_num % 3 == 2 {
             for item in rucksack_group[0].chars() {
-                if rucksack_group[1].contains(item) {
-                    if rucksack_group[2].contains(item) {
-                        score += if item.is_ascii_uppercase() {
-                            item as u32 - 38
-                        } else {
-                            item as u32 - 96
-                        };
-                        break;
-                    }
+                if rucksack_group[1].contains(item) && rucksack_group[2].contains(item) {
+                    score += if item.is_ascii_uppercase() {
+                        item as u32 - 38
+                    } else {
+                        item as u32 - 96
+                    };
+                    break;
                 }
             }
         }
-
-        rucksack_num += 1;
     }
 
-    return score;
+    score
 }
 
 fn main() {

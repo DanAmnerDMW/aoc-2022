@@ -3,7 +3,7 @@ use std::fs;
 const INPUT_SIZE: usize = 14;
 
 fn read_input_file() -> String {
-    return fs::read_to_string("input.txt").expect("Unable to read input file");
+    fs::read_to_string("input.txt").unwrap()
 }
 
 fn is_marker(input: &str) -> bool {
@@ -19,7 +19,7 @@ fn is_marker(input: &str) -> bool {
         }
     }
 
-    return true;
+    true
 }
 
 fn main() {
@@ -29,7 +29,7 @@ fn main() {
 
     let mut marker = 0;
 
-    if is_marker(&first_chars) {
+    if is_marker(first_chars) {
         marker = INPUT_SIZE;
     }
 
